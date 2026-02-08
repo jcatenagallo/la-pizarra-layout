@@ -21,8 +21,8 @@ const FlipDigit = ({ digit, delay = 0 }) => (
     initial={{ rotateX: -90, opacity: 0 }}
     animate={{ rotateX: 0, opacity: 1 }}
     transition={{ duration: 0.4, delay }}
-    className="relative bg-stadium-night text-stadium-ochre font-display text-lg md:text-2xl
-               w-7 md:w-9 h-7 md:h-9 flex items-center justify-center
+    className="relative bg-stadium-night text-stadium-ochre font-display text-xl md:text-2xl
+               w-8 md:w-9 h-8 md:h-9 flex items-center justify-center
                rounded-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)]
                border-t border-stadium-ochre/20"
     style={{ perspective: '500px', transformStyle: 'preserve-3d' }}
@@ -38,11 +38,11 @@ const ScoreDisplay = ({ home, away, isLive }) => {
   const awayDigits = String(away ?? '-').padStart(1, '0').split('');
 
   return (
-    <div className="flex items-center gap-1.5 md:gap-3">
+    <div className="flex items-center gap-2 md:gap-3">
       <div className="flex gap-0.5 md:gap-1">
         {homeDigits.map((d, i) => <FlipDigit key={`h${i}`} digit={d} delay={i * 0.1} />)}
       </div>
-      <span className="text-stadium-chalk text-lg md:text-2xl font-display">
+      <span className="text-stadium-chalk text-xl md:text-2xl font-display">
         -
       </span>
       <div className="flex gap-0.5 md:gap-1">
