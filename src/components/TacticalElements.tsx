@@ -16,21 +16,21 @@ export function TacticalElements({
   }, []);
 
   const players = [
-    { x: 150, y: 200, type: "x" },
-    { x: 250, y: 280, type: "o" },
-    { x: 350, y: 150, type: "x" },
-    { x: 450, y: 350, type: "o" },
-    { x: 550, y: 200, type: "x" },
-    { x: 650, y: 300, type: "o" },
-    { x: 750, y: 180, type: "x" },
-    { x: 850, y: 280, type: "o" },
+    { x: 100, y: 120, type: "x" },
+    { x: 200, y: 200, type: "o" },
+    { x: 300, y: 100, type: "x" },
+    { x: 400, y: 280, type: "o" },
+    { x: 500, y: 150, type: "x" },
+    { x: 600, y: 220, type: "o" },
+    { x: 700, y: 130, type: "x" },
+    { x: 800, y: 200, type: "o" },
   ];
 
   const arrows = [
-    { x1: 170, y1: 200, x2: 300, y2: 150, curve: 30 },
-    { x1: 280, y1: 280, x2: 420, y2: 200, curve: -40 },
-    { x1: 580, y1: 200, x2: 700, y2: 300, curve: 50 },
-    { x1: 770, y1: 180, x2: 900, y2: 250, curve: -30 },
+    { x1: 120, y1: 120, x2: 250, y2: 100, curve: 30 },
+    { x1: 230, y1: 200, x2: 370, y2: 150, curve: -40 },
+    { x1: 530, y1: 150, x2: 650, y2: 220, curve: 50 },
+    { x1: 720, y1: 130, x2: 850, y2: 180, curve: -30 },
   ];
 
   return (
@@ -42,9 +42,8 @@ export function TacticalElements({
       }}
     >
       <svg
-        viewBox="0 0 1200 700"
-        className="w-full
-   h-full"
+        viewBox="-40 -40 1080 580"
+        className="w-full h-full"
         preserveAspectRatio="xMidYMin meet"
       >
         {/* Players */}

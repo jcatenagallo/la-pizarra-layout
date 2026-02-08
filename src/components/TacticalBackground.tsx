@@ -23,34 +23,34 @@ export function TacticalBackground({
   const strokeWidth = 1.5;
   const dashArray = animated ? "4 4" : "none";
 
-  // Random positions for tactical elements
+  // Random positions for tactical elements (adjusted for 1000x500 viewBox)
   const players = [
-    { x: 150, y: 200, type: "x" },
-    { x: 250, y: 280, type: "o" },
-    { x: 350, y: 150, type: "x" },
-    { x: 450, y: 350, type: "o" },
-    { x: 550, y: 200, type: "x" },
-    { x: 650, y: 300, type: "o" },
-    { x: 750, y: 180, type: "x" },
-    { x: 850, y: 280, type: "o" },
-    { x: 950, y: 220, type: "x" },
-    { x: 1050, y: 350, type: "o" },
+    { x: 100, y: 120, type: "x" },
+    { x: 200, y: 200, type: "o" },
+    { x: 300, y: 100, type: "x" },
+    { x: 400, y: 280, type: "o" },
+    { x: 500, y: 150, type: "x" },
+    { x: 600, y: 220, type: "o" },
+    { x: 700, y: 130, type: "x" },
+    { x: 800, y: 200, type: "o" },
+    { x: 900, y: 160, type: "x" },
+    { x: 950, y: 280, type: "o" },
   ];
 
   const arrows = [
-    { x1: 170, y1: 200, x2: 300, y2: 150, curve: 30 },
-    { x1: 280, y1: 280, x2: 420, y2: 200, curve: -40 },
-    { x1: 580, y1: 200, x2: 700, y2: 300, curve: 50 },
-    { x1: 770, y1: 180, x2: 900, y2: 250, curve: -30 },
-    { x1: 980, y1: 220, x2: 1100, y2: 180, curve: 20 },
+    { x1: 120, y1: 120, x2: 250, y2: 100, curve: 30 },
+    { x1: 230, y1: 200, x2: 370, y2: 150, curve: -40 },
+    { x1: 530, y1: 150, x2: 650, y2: 220, curve: 50 },
+    { x1: 720, y1: 130, x2: 850, y2: 180, curve: -30 },
+    { x1: 880, y1: 160, x2: 970, y2: 130, curve: 20 },
   ];
 
   const renderFieldLines = () => (
     <g className="field-lines">
-      {/* Main field outline */}
+      {/* Main field outline - full width */}
       <rect
-        x="100"
-        y="100"
+        x="0"
+        y="0"
         width="1000"
         height="500"
         fill="none"
@@ -61,18 +61,18 @@ export function TacticalBackground({
 
       {/* Center line */}
       <line
-        x1="600"
-        y1="100"
-        x2="600"
-        y2="600"
+        x1="500"
+        y1="0"
+        x2="500"
+        y2="500"
         stroke={color}
         strokeWidth={strokeWidth}
       />
 
       {/* Center circle */}
       <circle
-        cx="600"
-        cy="350"
+        cx="500"
+        cy="250"
         r="80"
         fill="none"
         stroke={color}
@@ -80,12 +80,12 @@ export function TacticalBackground({
       />
 
       {/* Center dot */}
-      <circle cx="600" cy="350" r="4" fill={color} />
+      <circle cx="500" cy="250" r="4" fill={color} />
 
       {/* Left penalty area */}
       <rect
-        x="100"
-        y="200"
+        x="0"
+        y="100"
         width="120"
         height="300"
         fill="none"
@@ -95,8 +95,8 @@ export function TacticalBackground({
 
       {/* Left goal area */}
       <rect
-        x="100"
-        y="275"
+        x="0"
+        y="175"
         width="50"
         height="150"
         fill="none"
@@ -106,19 +106,19 @@ export function TacticalBackground({
 
       {/* Left penalty arc */}
       <path
-        d={`M 220 280 A 60 60 0 0 1 220 420`}
+        d={`M 120 180 A 60 60 0 0 1 120 320`}
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
       />
 
       {/* Left penalty spot */}
-      <circle cx="180" cy="350" r="3" fill={color} />
+      <circle cx="80" cy="250" r="3" fill={color} />
 
       {/* Right penalty area */}
       <rect
-        x="980"
-        y="200"
+        x="880"
+        y="100"
         width="120"
         height="300"
         fill="none"
@@ -128,8 +128,8 @@ export function TacticalBackground({
 
       {/* Right goal area */}
       <rect
-        x="1050"
-        y="275"
+        x="950"
+        y="175"
         width="50"
         height="150"
         fill="none"
@@ -139,36 +139,36 @@ export function TacticalBackground({
 
       {/* Right penalty arc */}
       <path
-        d={`M 980 280 A 60 60 0 0 0 980 420`}
+        d={`M 880 180 A 60 60 0 0 0 880 320`}
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
       />
 
       {/* Right penalty spot */}
-      <circle cx="1020" cy="350" r="3" fill={color} />
+      <circle cx="920" cy="250" r="3" fill={color} />
 
       {/* Corner arcs */}
       <path
-        d="M 100 110 A 10 10 0 0 1 110 100"
+        d="M 0 10 A 10 10 0 0 1 10 0"
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
       />
       <path
-        d="M 1090 100 A 10 10 0 0 1 1100 110"
+        d="M 990 0 A 10 10 0 0 1 1000 10"
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
       />
       <path
-        d="M 100 590 A 10 10 0 0 0 110 600"
+        d="M 0 490 A 10 10 0 0 0 10 500"
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
       />
       <path
-        d="M 1090 600 A 10 10 0 0 0 1100 590"
+        d="M 990 500 A 10 10 0 0 0 1000 490"
         fill="none"
         stroke={color}
         strokeWidth={strokeWidth}
@@ -330,7 +330,7 @@ export function TacticalBackground({
         style={{ opacity }}
       >
         <svg
-          viewBox="0 0 1200 700"
+          viewBox="-40 -40 1080 580"
           className="w-full h-full"
           preserveAspectRatio="xMidYMin meet"
         >
@@ -347,7 +347,7 @@ export function TacticalBackground({
         style={{ opacity }}
       >
         <svg
-          viewBox="0 0 1200 700"
+          viewBox="-40 -40 1080 580"
           className="w-full h-full"
           preserveAspectRatio="xMidYMin meet"
         >
@@ -456,7 +456,7 @@ export function TacticalBackground({
         style={{ opacity }}
       >
         <svg
-          viewBox="0 0 1200 700"
+          viewBox="-40 -40 1080 580"
           className="w-full h-full"
           preserveAspectRatio="xMidYMin meet"
         >
@@ -511,7 +511,7 @@ export function TacticalBackground({
         style={{ opacity: opacity * 1.5 }}
       >
         <svg
-          viewBox="0 0 1200 700"
+          viewBox="-40 -40 1080 580"
           className="w-full h-full"
           preserveAspectRatio="xMidYMin meet"
         >
@@ -580,7 +580,7 @@ export function TacticalBackground({
       style={{ opacity }}
     >
       <svg
-        viewBox="0 0 1200 700"
+        viewBox="-40 -40 1080 580"
         className="w-full h-full"
         preserveAspectRatio="xMidYMin meet"
       >

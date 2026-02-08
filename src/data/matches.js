@@ -1,58 +1,59 @@
 // Shared match data for La Pizarra
 
+// ESPN logo URL helpers
+const espnLogo = (id) => `https://a.espncdn.com/i/teamlogos/soccer/500/${id}.png`;
+const espnLeagueLogo = (id) => `https://a.espncdn.com/i/leaguelogos/soccer/500/${id}.png`;
+
 export const countries = [
-  { id: 'esp', name: 'España', flag: '🇪🇸' },
-  { id: 'eng', name: 'Inglaterra', flag: '🇬🇧' },
-  { id: 'ita', name: 'Italia', flag: '🇮🇹' },
-  { id: 'ger', name: 'Alemania', flag: '🇩🇪' },
-  { id: 'fra', name: 'Francia', flag: '🇫🇷' },
-  { id: 'arg', name: 'Argentina', flag: '🇦🇷' },
-  { id: 'bra', name: 'Brasil', flag: '🇧🇷' },
-  { id: 'int', name: 'Internacional', flag: '🌍' },
+  { id: 'esp', name: 'Espana' },
+  { id: 'eng', name: 'Inglaterra' },
+  { id: 'ita', name: 'Italia' },
+  { id: 'ger', name: 'Alemania' },
+  { id: 'fra', name: 'Francia' },
+  { id: 'arg', name: 'Argentina' },
+  { id: 'bra', name: 'Brasil' },
+  { id: 'int', name: 'Internacional' },
 ];
 
 export const leagues = [
-  // España
-  { id: 'laliga', name: 'La Liga', country: 'esp', logo: '⚽', featured: true },
-  { id: 'coparey', name: 'Copa del Rey', country: 'esp', logo: '🏆', featured: false },
-  { id: 'segunda', name: 'La Liga 2', country: 'esp', logo: '⚽', featured: false },
+  // Espana
+  { id: 'laliga', name: 'La Liga', country: 'esp', featured: true, logo: espnLeagueLogo(15) },
+  { id: 'coparey', name: 'Copa del Rey', country: 'esp', featured: false, logo: espnLeagueLogo(80) },
+  { id: 'segunda', name: 'La Liga 2', country: 'esp', featured: false, logo: espnLeagueLogo(107) },
 
   // Inglaterra
-  { id: 'premier', name: 'Premier League', country: 'eng', logo: '🦁', featured: true },
-  { id: 'facup', name: 'FA Cup', country: 'eng', logo: '🏆', featured: false },
-  { id: 'championship', name: 'Championship', country: 'eng', logo: '⚽', featured: false },
-  { id: 'eflcup', name: 'EFL Cup', country: 'eng', logo: '🏆', featured: false },
+  { id: 'premier', name: 'Premier League', country: 'eng', featured: true, logo: espnLeagueLogo(23) },
+  { id: 'facup', name: 'FA Cup', country: 'eng', featured: false, logo: espnLeagueLogo(40) },
+  { id: 'championship', name: 'Championship', country: 'eng', featured: false, logo: espnLeagueLogo(24) },
+  { id: 'eflcup', name: 'EFL Cup', country: 'eng', featured: false, logo: espnLeagueLogo(41) },
 
   // Italia
-  { id: 'seriea', name: 'Serie A', country: 'ita', logo: '🇮🇹', featured: true },
-  { id: 'copaitalia', name: 'Coppa Italia', country: 'ita', logo: '🏆', featured: false },
+  { id: 'seriea', name: 'Serie A', country: 'ita', featured: true, logo: espnLeagueLogo(12) },
+  { id: 'copaitalia', name: 'Coppa Italia', country: 'ita', featured: false, logo: espnLeagueLogo(2192) },
 
   // Alemania
-  { id: 'bundesliga', name: 'Bundesliga', country: 'ger', logo: '🇩🇪', featured: true },
-  { id: 'dfbpokal', name: 'DFB-Pokal', country: 'ger', logo: '🏆', featured: false },
+  { id: 'bundesliga', name: 'Bundesliga', country: 'ger', featured: true, logo: espnLeagueLogo(10) },
+  { id: 'dfbpokal', name: 'DFB-Pokal', country: 'ger', featured: false, logo: espnLeagueLogo(2061) },
 
   // Francia
-  { id: 'ligue1', name: 'Ligue 1', country: 'fra', logo: '🇫🇷', featured: false },
-  { id: 'coupedefrance', name: 'Coupe de France', country: 'fra', logo: '🏆', featured: false },
+  { id: 'ligue1', name: 'Ligue 1', country: 'fra', featured: false, logo: espnLeagueLogo(9) },
+  { id: 'coupedefrance', name: 'Coupe de France', country: 'fra', featured: false, logo: espnLeagueLogo(182) },
 
   // Argentina
-  { id: 'lpf', name: 'Liga Profesional', country: 'arg', logo: '🇦🇷', featured: true },
-  { id: 'copaarg', name: 'Copa Argentina', country: 'arg', logo: '🏆', featured: false },
+  { id: 'lpf', name: 'Liga Profesional', country: 'arg', featured: true, logo: espnLeagueLogo(1) },
+  { id: 'copaarg', name: 'Copa Argentina', country: 'arg', featured: false, logo: espnLeagueLogo(2320) },
 
   // Brasil
-  { id: 'brasileirao', name: 'Brasileirão', country: 'bra', logo: '🇧🇷', featured: false },
-  { id: 'copabrasil', name: 'Copa do Brasil', country: 'bra', logo: '🏆', featured: false },
+  { id: 'brasileirao', name: 'Brasileirao', country: 'bra', featured: false, logo: espnLeagueLogo(85) },
+  { id: 'copabrasil', name: 'Copa do Brasil', country: 'bra', featured: false, logo: espnLeagueLogo(528) },
 
   // Internacionales
-  { id: 'ucl', name: 'Champions League', country: 'int', logo: '⭐', featured: true },
-  { id: 'uel', name: 'Europa League', country: 'int', logo: '🔶', featured: true },
-  { id: 'uecl', name: 'Conference League', country: 'int', logo: '🟢', featured: false },
-  { id: 'libertadores', name: 'Copa Libertadores', country: 'int', logo: '🏆', featured: true },
-  { id: 'sudamericana', name: 'Copa Sudamericana', country: 'int', logo: '🏆', featured: false },
+  { id: 'ucl', name: 'Champions League', country: 'int', featured: true, logo: espnLeagueLogo(2) },
+  { id: 'uel', name: 'Europa League', country: 'int', featured: true, logo: espnLeagueLogo(2310) },
+  { id: 'uecl', name: 'Conference League', country: 'int', featured: false, logo: espnLeagueLogo(20296) },
+  { id: 'libertadores', name: 'Copa Libertadores', country: 'int', featured: true, logo: espnLeagueLogo(58) },
+  { id: 'sudamericana', name: 'Copa Sudamericana', country: 'int', featured: false, logo: espnLeagueLogo(1208) },
 ];
-
-// ESPN logo URL helper
-const espnLogo = (id) => `https://a.espncdn.com/i/teamlogos/soccer/500/${id}.png`;
 
 export const teams = {
   // La Liga
@@ -128,9 +129,13 @@ export const matches = [
     date: formatDate(today),
     time: '21:00',
     events: [
-      { minute: 12, type: 'goal', team: 'home', player: 'Vinícius Jr.' },
+      { minute: 12, type: 'goal', team: 'home', player: 'Vinicius Jr.' },
       { minute: 34, type: 'goal', team: 'away', player: 'Haaland' },
       { minute: 58, type: 'goal', team: 'home', player: 'Bellingham' },
+      { minute: 63, type: 'redCard', team: 'away', player: 'Walker' },
+      // { minute: 65, type: 'substitution', team: 'home', playerIn: 'Modric', playerOut: 'Camavinga' },
+      // { minute: 65, type: 'substitution', team: 'home', playerIn: 'Rodrygo', playerOut: 'Brahim' },
+      // { minute: 65, type: 'substitution', team: 'home', playerIn: 'Joselu', playerOut: 'Vinicius Jr.' },
     ]
   },
   {
@@ -145,8 +150,10 @@ export const matches = [
     date: formatDate(today),
     time: '21:00',
     events: [
-      { minute: 23, type: 'goal', team: 'away', player: 'Dembélé' },
+      { minute: 23, type: 'goal', team: 'away', player: 'Dembele' },
       { minute: 45, type: 'goal', team: 'home', player: 'Lewandowski' },
+      // { minute: 60, type: 'substitution', team: 'home', playerIn: 'Ferran Torres', playerOut: 'Raphinha' },
+      // { minute: 68, type: 'substitution', team: 'away', playerIn: 'Kolo Muani', playerOut: 'Goncalo Ramos' },
     ]
   },
   {
@@ -160,7 +167,9 @@ export const matches = [
     minute: 23,
     date: formatDate(today),
     time: '20:45',
-    events: []
+    events: [
+      // { minute: 18, type: 'substitution', team: 'away', playerIn: 'Gakpo', playerOut: 'Jota' },
+    ]
   },
   {
     id: 4,
@@ -176,7 +185,12 @@ export const matches = [
     events: [
       { minute: 15, type: 'goal', team: 'away', player: 'Borja' },
       { minute: 44, type: 'goal', team: 'home', player: 'Cavani' },
+      // { minute: 60, type: 'substitution', team: 'home', playerIn: 'Zenon', playerOut: 'Pol Fernandez' },
+      // { minute: 60, type: 'substitution', team: 'home', playerIn: 'Merentiel', playerOut: 'Cavani' },
       { minute: 67, type: 'goal', team: 'away', player: 'Solari' },
+      // { minute: 70, type: 'substitution', team: 'away', playerIn: 'Palavecino', playerOut: 'Fernandez' },
+      // { minute: 70, type: 'substitution', team: 'away', playerIn: 'Colidio', playerOut: 'Solari' },
+      { minute: 75, type: 'redCard', team: 'home', player: 'Rojo' },
     ]
   },
   {
@@ -193,6 +207,7 @@ export const matches = [
     events: [
       { minute: 8, type: 'goal', team: 'home', player: 'Lautaro' },
       { minute: 31, type: 'goal', team: 'home', player: 'Barella' },
+      // { minute: 46, type: 'substitution', team: 'away', playerIn: 'Pulisic', playerOut: 'Chukwueze' },
       { minute: 52, type: 'goal', team: 'home', player: 'Thuram' },
     ]
   },

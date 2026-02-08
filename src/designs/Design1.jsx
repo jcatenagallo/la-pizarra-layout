@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Landmark } from 'lucide-react';
 import {
   matches, leagues, countries, teams,
   getMatchesByStatus, getLeague, getTeam, getCountry,
@@ -19,8 +20,8 @@ const FlipDigit = ({ digit, delay = 0 }) => (
     initial={{ rotateX: -90, opacity: 0 }}
     animate={{ rotateX: 0, opacity: 1 }}
     transition={{ duration: 0.4, delay }}
-    className="relative bg-stadium-night text-stadium-ochre font-display text-xl md:text-2xl
-               w-8 md:w-9 h-8 md:h-9 flex items-center justify-center
+    className="relative bg-stadium-night text-stadium-ochre font-display text-lg md:text-2xl
+               w-7 md:w-9 h-7 md:h-9 flex items-center justify-center
                rounded-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)]
                border-t border-stadium-ochre/20"
     style={{ perspective: '500px', transformStyle: 'preserve-3d' }}
@@ -36,19 +37,162 @@ const ScoreDisplay = ({ home, away, isLive }) => {
   const awayDigits = String(away ?? '-').padStart(1, '0').split('');
 
   return (
-    <div className="flex items-center gap-2 md:gap-3">
-      <div className="flex gap-1">
+    <div className="flex items-center gap-1.5 md:gap-3">
+      <div className="flex gap-0.5 md:gap-1">
         {homeDigits.map((d, i) => <FlipDigit key={`h${i}`} digit={d} delay={i * 0.1} />)}
       </div>
-      <motion.span
-        className="text-stadium-chalk text-xl md:text-2xl font-display"
-        animate={isLive ? { opacity: [1, 0.3, 1] } : {}}
-        transition={{ duration: 1, repeat: Infinity }}
-      >
+      <span className="text-stadium-chalk text-lg md:text-2xl font-display">
         -
-      </motion.span>
-      <div className="flex gap-1">
-        {awayDigits.map((d, i) => <FlipDigit key={`a${i}`} digit={d} delay={0.3 + i * 0.1} />)}
+      </span>
+      <div className="flex gap-0.5 md:gap-1">
+        {awayDigits.map((d, i) => <FlipDigit key={`a${i}`} digit={d} delay={i * 0.1} />)}
+      </div>
+    </div>
+  );
+};
+
+// Goal icon - football/soccer goal post
+const GoalIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="inline-block">
+    {/* Goal frame */}
+    <path
+      d="M3 20 L3 6 L21 6 L21 20"
+      stroke="white"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    {/* Net lines - horizontal */}
+    <line x1="3" y1="10" x2="21" y2="10" stroke="white" strokeWidth="0.75" opacity="0.6" />
+    <line x1="3" y1="14" x2="21" y2="14" stroke="white" strokeWidth="0.75" opacity="0.6" />
+    <line x1="3" y1="18" x2="21" y2="18" stroke="white" strokeWidth="0.75" opacity="0.6" />
+    {/* Net lines - vertical */}
+    <line x1="7" y1="6" x2="7" y2="20" stroke="white" strokeWidth="0.75" opacity="0.6" />
+    <line x1="12" y1="6" x2="12" y2="20" stroke="white" strokeWidth="0.75" opacity="0.6" />
+    <line x1="17" y1="6" x2="17" y2="20" stroke="white" strokeWidth="0.75" opacity="0.6" />
+  </svg>
+);
+
+// Card icon (vertical) - only red card now
+const CardIcon = () => (
+  <svg width={10} height={14} viewBox="0 0 10 14" className="inline-block">
+    <rect
+      x="1"
+      y="1"
+      width="8"
+      height="12"
+      rx="1"
+      fill="#EF4444"
+      stroke="#DC2626"
+      strokeWidth="1"
+    />
+  </svg>
+);
+
+// Substitution icon - arrows up/down
+const SubstitutionIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="inline-block">
+    {/* Arrow up - player in (green) */}
+    <path
+      d="M7 14 L7 6 M4 9 L7 6 L10 9"
+      stroke="#22C55E"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    {/* Arrow down - player out (red) */}
+    <path
+      d="M17 10 L17 18 M14 15 L17 18 L20 15"
+      stroke="#EF4444"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// Event icon component
+const EventIcon = ({ type }) => {
+  switch (type) {
+    case 'goal':
+      return <GoalIcon size={14} />;
+    case 'redCard':
+      return <CardIcon />;
+    case 'substitution':
+      return <SubstitutionIcon size={14} />;
+    default:
+      return null;
+  }
+};
+
+// Events panel - same layout as score row so minutes align with the dash
+const MatchEventsPanel = ({ events }) => {
+  if (!events || events.length === 0) return null;
+
+  const sortedEvents = [...events].sort((a, b) => a.minute - b.minute);
+
+  return (
+    <div className="border-t-2 border-stadium-ochre/40">
+      <div className="px-2 md:px-4 py-1.5 md:py-2 space-y-0.5 md:space-y-1">
+        {sortedEvents.map((event, idx) => {
+          const isHome = event.team === 'home';
+          return (
+            <div
+              key={idx}
+              className="flex items-center"
+            >
+              {/* Home side: player name + icon */}
+              <div className="flex-1 flex items-center justify-end gap-1 md:gap-2">
+                {isHome && (
+                  event.type === 'substitution' ? (
+                    <div className="flex flex-col items-end text-xs md:text-sm font-condensed">
+                      <span className="text-green-400">{event.playerIn}</span>
+                      <span className="text-red-400">{event.playerOut}</span>
+                    </div>
+                  ) : (
+                    <span className="font-condensed text-stadium-chalk text-xs md:text-sm text-right">
+                      {event.player}
+                    </span>
+                  )
+                )}
+              </div>
+
+              {/* Home icon column - fixed width */}
+              <div className="w-4 md:w-5 flex justify-center">
+                {isHome && <EventIcon type={event.type} />}
+              </div>
+
+              {/* Minutes - center column */}
+              <div className="w-9 md:w-12 flex justify-center">
+                <span className="font-condensed text-[#F0C850] text-xs md:text-sm font-semibold">
+                  {event.minute}'
+                </span>
+              </div>
+
+              {/* Away icon column - fixed width */}
+              <div className="w-4 md:w-5 flex justify-center">
+                {!isHome && <EventIcon type={event.type} />}
+              </div>
+
+              {/* Away side: icon + player name */}
+              <div className="flex-1 flex items-center justify-start gap-1 md:gap-2">
+                {!isHome && (
+                  event.type === 'substitution' ? (
+                    <div className="flex flex-col items-start text-xs md:text-sm font-condensed">
+                      <span className="text-green-400">{event.playerIn}</span>
+                      <span className="text-red-400">{event.playerOut}</span>
+                    </div>
+                  ) : (
+                    <span className="font-condensed text-stadium-chalk text-xs md:text-sm">
+                      {event.player}
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -61,16 +205,13 @@ const MatchCard = ({ match, index }) => {
   const isFinished = match.status === 'finished';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="relative bg-gradient-to-br from-[#1a5c2a] via-[#147024] to-[#0d4a1a]
-                 rounded-md px-2 py-1.5 md:px-3 md:py-2 overflow-hidden group
-                 border border-stadium-ochre/30 shadow-lg"
+    <div
+      className="relative rounded-none md:rounded-xl overflow-hidden
+                 border-x-0 md:border-x-2 border-y border-stadium-ochre/40 md:shadow-lg
+                 bg-gradient-to-br from-[#1a5629] via-[#145d23] to-[#0d431a]"
     >
-      {/* Grass texture */}
-      <div className="absolute inset-0 opacity-30"
+      {/* Grass texture - covers entire card */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none"
            style={{
              backgroundImage: `repeating-linear-gradient(
                90deg,
@@ -81,68 +222,65 @@ const MatchCard = ({ match, index }) => {
              )`
            }} />
 
-      {/* Stadium lights effect */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40
-                      bg-stadium-ochre/20 rounded-full blur-3xl" />
-
-      <div className="relative z-10 flex items-center gap-3">
-        {/* Match time/status - Left side */}
-        <div className="w-14 shrink-0 text-center">
+      {/* Main row */}
+      <div className="flex items-stretch">
+        {/* Time/Status section - Left */}
+        <div className="relative z-10 w-12 md:w-20 shrink-0 flex flex-col items-center justify-center
+                        border-r-2 border-stadium-ochre/40 py-2 md:py-3">
           {isLive ? (
-            <div className="flex flex-col items-center">
-              <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
-                className="w-2 h-2 rounded-full bg-stadium-red shadow-[0_0_8px_rgba(196,69,54,0.8)] mb-0.5"
-              />
-              <span className="font-condensed text-white font-bold text-base">
-                {match.minute}'
-              </span>
-            </div>
+            <span className="font-condensed text-white font-bold text-base md:text-2xl">
+              {match.minute}'
+            </span>
           ) : isFinished ? (
-            <span className="font-condensed text-stadium-ochre text-xs tracking-widest">
-              FINAL
+            <span className="font-condensed text-white font-bold text-xs md:text-xl">
+              FIN
             </span>
           ) : (
-            <span className="font-mono text-stadium-chalk/70 text-sm">
+            <span className="font-condensed text-white font-bold text-base md:text-2xl">
               {match.time}
             </span>
           )}
         </div>
 
-        {/* Teams and Score */}
-        <div className="flex-1 flex items-center justify-center gap-3 md:gap-4">
-          {/* Home Team */}
-          <div className="flex-1 flex items-center justify-end gap-2 min-w-0">
-            <div className="font-display text-stadium-chalk text-sm md:text-lg lg:text-xl tracking-wide truncate">
-              {homeTeam?.name}
+        {/* Match content - Right */}
+        <div className="flex-1 relative min-w-0">
+          {/* Teams and Score */}
+          <div className="relative z-10 flex items-center justify-center gap-1.5 md:gap-4 px-2 py-2 md:px-4 md:py-3">
+            {/* Home Team */}
+            <div className="flex-1 flex flex-col items-center md:flex-row md:items-center md:justify-end gap-0.5 md:gap-2 min-w-0">
+              <img
+                src={homeTeam?.logo}
+                alt={homeTeam?.name}
+                className="w-7 h-7 md:w-10 md:h-10 object-contain shrink-0 drop-shadow-lg md:order-2"
+              />
+              <div className="font-display text-stadium-chalk text-xs md:text-lg lg:text-xl tracking-wide md:order-1 text-center md:text-right leading-tight md:truncate">
+                {homeTeam?.name}
+              </div>
             </div>
-            <img
-              src={homeTeam?.logo}
-              alt={homeTeam?.name}
-              className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0 drop-shadow-lg"
-            />
+
+            {/* Score */}
+            <div className="shrink-0">
+              <ScoreDisplay home={match.homeScore} away={match.awayScore} isLive={isLive} />
+            </div>
+
+            {/* Away Team */}
+            <div className="flex-1 flex flex-col items-center md:flex-row md:items-center md:justify-start gap-0.5 md:gap-2 min-w-0">
+              <img
+                src={awayTeam?.logo}
+                alt={awayTeam?.name}
+                className="w-7 h-7 md:w-10 md:h-10 object-contain shrink-0 drop-shadow-lg"
+              />
+              <div className="font-display text-stadium-chalk text-xs md:text-lg lg:text-xl tracking-wide text-center md:text-left leading-tight md:truncate">
+                {awayTeam?.name}
+              </div>
+            </div>
           </div>
 
-          {/* Score */}
-          <div className="px-2 shrink-0">
-            <ScoreDisplay home={match.homeScore} away={match.awayScore} isLive={isLive} />
-          </div>
-
-          {/* Away Team */}
-          <div className="flex-1 flex items-center justify-start gap-2 min-w-0">
-            <img
-              src={awayTeam?.logo}
-              alt={awayTeam?.name}
-              className="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0 drop-shadow-lg"
-            />
-            <div className="font-display text-stadium-chalk text-sm md:text-lg lg:text-xl tracking-wide truncate">
-              {awayTeam?.name}
-            </div>
-          </div>
+          {/* Events - same layout as score */}
+          <MatchEventsPanel events={match.events} />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -151,23 +289,39 @@ const LeagueSection = ({ leagueId, matchList }) => {
   const country = getCountry(league?.country);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="mb-8"
-    >
-      <div className="flex items-center gap-2 mb-2 pb-1 border-b border-stadium-ochre/30">
-        <CountryBadge countryId={league?.country} size={20} />
-        <h3 className="font-display text-white text-lg tracking-wide">
-          {league?.name}
-        </h3>
+    <div className="mb-3 md:mb-6">
+      {/* Table-style container with full border */}
+      <div className="border-2 border-stadium-ochre/40 rounded-lg overflow-hidden
+                      bg-stadium-night
+                      shadow-[0_4px_20px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(212,160,61,0.1)]">
+
+        {/* Header row - integrated into the table */}
+        <div className="flex items-center gap-3 px-4 py-3
+                        bg-gradient-to-r from-stadium-ochre via-[#c4942f] to-stadium-ochre
+                        border-b-2 border-stadium-ochre/50">
+          {league?.logo ? (
+            <img src={league.logo} alt={league.name} className="w-7 h-7 object-contain drop-shadow-md" />
+          ) : (
+            <CountryBadge countryId={league?.country} size={22} />
+          )}
+          <h3 className="font-display text-stadium-night text-xl tracking-wide
+                         drop-shadow-[0_1px_0_rgba(255,255,255,0.2)]">
+            {league?.name}
+          </h3>
+          <div className="flex-1 h-px bg-gradient-to-r from-stadium-night/20 to-transparent ml-2" />
+          <span className="font-condensed text-stadium-night text-xs tracking-wider">
+            {matchList.length} {matchList.length === 1 ? 'PARTIDO' : 'PARTIDOS'}
+          </span>
+        </div>
+
+        {/* Matches container - inside the table */}
+        <div className="p-0 md:p-3 space-y-1 md:space-y-2">
+          {matchList.map((match, idx) => (
+            <MatchCard key={match.id} match={match} index={idx} />
+          ))}
+        </div>
       </div>
-      <div className="grid gap-2">
-        {matchList.map((match, idx) => (
-          <MatchCard key={match.id} match={match} index={idx} />
-        ))}
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -185,7 +339,7 @@ const DateSelector = ({ selectedDate, onDateChange }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-1 md:gap-1.5 overflow-x-auto">
+    <div className="flex items-center justify-center gap-1 md:gap-1.5 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
       {dates.map((date, idx) => {
         const dateStr = date.toISOString().split('T')[0];
         const isSelected = dateStr === selectedDate;
@@ -198,8 +352,9 @@ const DateSelector = ({ selectedDate, onDateChange }) => {
             whileTap={{ scale: 0.95 }}
             onClick={() => onDateChange(dateStr)}
             className={`
-              flex flex-col items-center px-2.5 py-1.5 md:px-3 md:py-2 rounded-md transition-all
+              flex-col items-center px-2.5 py-1.5 md:px-3 md:py-2 rounded-md transition-all
               font-condensed min-w-[50px]
+              ${(idx === 0 || idx === 6) ? 'hidden md:flex' : 'flex'}
               ${isSelected
                 ? 'bg-stadium-ochre text-stadium-night shadow-lg'
                 : 'bg-stadium-night/50 text-stadium-chalk/60 hover:bg-stadium-night/80'}
@@ -220,33 +375,35 @@ const LeaguesSidebar = ({ selectedLeague, onLeagueSelect }) => {
 
   return (
     <div className="bg-stadium-night/80 rounded-lg p-4 border-2 border-stadium-ochre/20">
-      <h3 className="font-display text-stadium-ochre text-xl mb-4 tracking-wide flex items-center gap-2">
-        <span>⭐</span> DESTACADOS
-      </h3>
-      <div className="space-y-2 mb-6">
-        {featured.map(league => {
-          const country = getCountry(league.country);
-          return (
-            <motion.button
+      <div className="mb-6 border-2 border-stadium-ochre/30 rounded-lg overflow-hidden">
+        <div className="flex items-center gap-2 text-stadium-ochre py-2.5 px-3 bg-stadium-ochre/20">
+          <span className="font-display text-lg uppercase tracking-wide font-semibold">Destacados</span>
+        </div>
+        <div className="divide-y divide-stadium-ochre/20">
+          {featured.map(league => (
+            <button
               key={league.id}
-              whileHover={{ x: 4 }}
               onClick={() => onLeagueSelect(league.id)}
               className={`
-                w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-colors
+                w-full flex items-center gap-3 px-3 py-1.5 text-left transition-colors cursor-pointer
                 ${selectedLeague === league.id
-                  ? 'bg-stadium-ochre text-stadium-night'
-                  : 'hover:bg-stadium-ochre/20 text-stadium-chalk/80'}
+                  ? 'bg-stadium-ochre text-stadium-night font-semibold'
+                  : 'text-white/90 hover:bg-stadium-ochre/20'}
               `}
             >
-              <CountryBadge countryId={league.country} size={16} />
-              <span className="font-condensed text-sm">{league.name}</span>
-            </motion.button>
-          );
-        })}
+              <motion.span
+                whileHover={{ x: 4 }}
+                className="font-condensed text-base"
+              >
+                {league.name}
+              </motion.span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="border-t border-stadium-ochre/20 pt-4">
-        <h4 className="font-display text-stadium-chalk/60 text-sm mb-3 tracking-wide">
+        <h4 className="font-display text-stadium-chalk/60 text-base mb-3 tracking-wide">
           POR PAÍS
         </h4>
         {countries.map(country => {
@@ -254,26 +411,30 @@ const LeaguesSidebar = ({ selectedLeague, onLeagueSelect }) => {
           if (countryLeagues.length === 0) return null;
 
           return (
-            <div key={country.id} className="mb-3">
-              <div className="flex items-center gap-2 text-stadium-chalk/40 text-xs mb-1">
-                <CountryBadge countryId={country.id} size={14} />
-                <span className="font-condensed uppercase tracking-wider">{country.name}</span>
+            <div key={country.id} className="mb-3 border border-stadium-ochre/20 rounded-lg overflow-hidden">
+              <div className="flex items-center gap-2 text-stadium-ochre text-sm py-2 px-3 bg-stadium-ochre/10">
+                <CountryBadge countryId={country.id} size={16} />
+                <span className="font-condensed uppercase tracking-wider font-semibold">{country.name}</span>
               </div>
-              <div className="ml-6 space-y-1">
+              <div className="divide-y divide-stadium-ochre/20">
                 {countryLeagues.map(league => (
-                  <motion.button
+                  <button
                     key={league.id}
-                    whileHover={{ x: 2 }}
                     onClick={() => onLeagueSelect(league.id)}
                     className={`
-                      block text-left text-sm font-condensed w-full px-2 py-1 rounded transition-colors
+                      block text-left w-full px-3 py-1.5 transition-colors cursor-pointer
                       ${selectedLeague === league.id
-                        ? 'text-stadium-ochre bg-stadium-ochre/10'
-                        : 'text-stadium-chalk/50 hover:text-stadium-chalk/80'}
+                        ? 'text-stadium-ochre bg-stadium-ochre/10 font-semibold'
+                        : 'text-white/90 hover:bg-stadium-ochre/20'}
                     `}
                   >
-                    {league.name}
-                  </motion.button>
+                    <motion.span
+                      whileHover={{ x: 4 }}
+                      className="block text-base font-condensed"
+                    >
+                      {league.name}
+                    </motion.span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -319,11 +480,11 @@ export default function Design1() {
                           transform skew-x-6" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 py-3 md:py-4">
+        <div className="relative max-w-7xl mx-auto px-4 py-2 md:py-4">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center mb-4"
+            className="flex flex-col items-center mb-2 md:mb-4"
           >
             {/* Logo + Title row */}
             <div className="flex items-center gap-4">
@@ -340,7 +501,7 @@ export default function Design1() {
             </div>
 
             {/* Tagline centered below */}
-            <p className="font-condensed text-stadium-chalk/50 text-[10px] md:text-xs tracking-[0.4em] uppercase mt-1">
+            <p className="font-condensed text-stadium-chalk/50 text-[10px] md:text-xs tracking-[0.4em] uppercase -mt-1 md:mt-1">
               La página de la pelotita
             </p>
           </motion.div>
@@ -353,12 +514,12 @@ export default function Design1() {
       {/* Live Matches Ticker */}
       {liveMatches.length > 0 && (
         <div className="bg-stadium-red border-y-2 border-stadium-ochre/50 overflow-hidden">
-          <div className="flex items-center relative">
-            <div className="bg-stadium-night px-4 py-2 flex items-center gap-2 shrink-0 relative z-10">
+          <div className="flex items-stretch relative">
+            <div className="bg-stadium-night px-4 flex items-center gap-2 shrink-0 relative z-10">
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
-                className="w-2 h-2 rounded-full bg-white"
+                className="w-2 h-2 rounded-full bg-red-500"
               />
               <span className="font-display text-white text-sm tracking-wider">EN VIVO</span>
             </div>
@@ -410,80 +571,32 @@ export default function Design1() {
         </div>
 
         {/* Content container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
           <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar */}
-          <aside className="lg:w-72 shrink-0 order-2 lg:order-1">
-            <LeaguesSidebar
-              selectedLeague={selectedLeague}
-              onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)}
-            />
-          </aside>
-
-          {/* Matches */}
-          <div className="flex-1 order-1 lg:order-2">
-            {/* Tabs - Hidden for now
-            <div className="flex gap-2 mb-6 flex-wrap">
-              {[
-                { id: 'all', label: 'TODOS', count: matches.length },
-                { id: 'live', label: 'EN VIVO', count: liveMatches.length },
-                { id: 'upcoming', label: 'PRÓXIMOS', count: upcomingMatches.length },
-                { id: 'finished', label: 'FINALIZADOS', count: finishedMatches.length },
-              ].map(tab => (
-                <motion.button
-                  key={tab.id}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    px-4 py-2 rounded-lg font-condensed text-sm tracking-wider transition-all
-                    flex items-center gap-2
-                    ${activeTab === tab.id
-                      ? 'bg-stadium-ochre text-stadium-night shadow-lg'
-                      : 'bg-stadium-night/50 text-stadium-chalk/60 hover:bg-stadium-night/80'}
-                  `}
-                >
-                  {tab.label}
-                  <span className={`
-                    text-xs px-2 py-0.5 rounded-full
-                    ${activeTab === tab.id ? 'bg-stadium-night/20' : 'bg-stadium-ochre/20'}
-                  `}>
-                    {tab.count}
-                  </span>
-                </motion.button>
+            <aside className="lg:w-72 shrink-0 order-2 lg:order-1">
+              <LeaguesSidebar
+                selectedLeague={selectedLeague}
+                onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)}
+              />
+            </aside>
+            <div className="flex-1 order-1 lg:order-2">
+              {Object.entries(groupedMatches).map(([leagueId, leagueMatches]) => (
+                <LeagueSection
+                  key={leagueId}
+                  leagueId={leagueId}
+                  matchList={leagueMatches}
+                />
               ))}
+              {Object.keys(groupedMatches).length === 0 && (
+                <div className="text-center py-16">
+                  <Landmark size={64} className="mx-auto mb-4 text-stadium-chalk/40" />
+                  <p className="font-display text-stadium-chalk/40 text-xl">
+                    NO HAY PARTIDOS
+                  </p>
+                </div>
+              )}
             </div>
-            */}
-
-            {/* Match List */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`${activeTab}-${selectedLeague}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {Object.entries(groupedMatches).map(([leagueId, leagueMatches]) => (
-                  <LeagueSection
-                    key={leagueId}
-                    leagueId={leagueId}
-                    matchList={leagueMatches}
-                  />
-                ))}
-
-                {Object.keys(groupedMatches).length === 0 && (
-                  <div className="text-center py-16">
-                    <span className="text-6xl mb-4 block">🏟️</span>
-                    <p className="font-display text-stadium-chalk/40 text-xl">
-                      NO HAY PARTIDOS
-                    </p>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
           </div>
-        </div>
         </div>
       </main>
 
