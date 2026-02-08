@@ -14,6 +14,7 @@ import { TacticalBackground } from '../components/TacticalBackground';
 import { TacticalElements } from '../components/TacticalElements';
 import { PizarraLogo } from '../components/Logo';
 import { CountryBadge } from '../components/CountryBadge';
+import { MobileSidebar } from '../components/MobileSidebar';
 
 const FlipDigit = ({ digit, delay = 0 }) => (
   <motion.div
@@ -445,7 +446,7 @@ const LeaguesSidebar = ({ selectedLeague, onLeagueSelect }) => {
   );
 };
 
-export default function Design1() {
+export default function Design1({ showLiveTicker = true }) {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedLeague, setSelectedLeague] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
@@ -512,7 +513,7 @@ export default function Design1() {
       </header>
 
       {/* Live Matches Ticker */}
-      {liveMatches.length > 0 && (
+      {showLiveTicker && liveMatches.length > 0 && (
         <div className="bg-stadium-red border-y-2 border-stadium-ochre/50 overflow-hidden">
           <div className="flex items-stretch relative">
             <div className="bg-stadium-night px-4 flex items-center gap-2 shrink-0 relative z-10">
@@ -571,15 +572,24 @@ export default function Design1() {
         </div>
 
         {/* Content container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-2 md:px-4 py-4 md:py-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <aside className="lg:w-72 shrink-0 order-2 lg:order-1">
+        <div className="relative z-10 max-w-7xl mx-auto px-2 md:px-4 pt-0 pb-2 md:py-8">
+          <div className="flex flex-col lg:flex-row gap-3 lg:gap-8">
+            {/* Desktop sidebar */}
+            <aside className="hidden lg:block lg:w-72 shrink-0 order-1">
               <LeaguesSidebar
                 selectedLeague={selectedLeague}
                 onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)}
               />
             </aside>
-            <div className="flex-1 order-1 lg:order-2">
+
+            {/* Mobile sidebar (Sheet drawer) */}
+            <MobileSidebar selectedLeague={selectedLeague}>
+              <LeaguesSidebar
+                selectedLeague={selectedLeague}
+                onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)}
+              />
+            </MobileSidebar>
+            <div className="flex-1 lg:order-2">
               {Object.entries(groupedMatches).map(([leagueId, leagueMatches]) => (
                 <LeagueSection
                   key={leagueId}

@@ -13,6 +13,7 @@ import { TacticalBackground } from '../components/TacticalBackground';
 import { TacticalElements } from '../components/TacticalElements';
 import { PizarraLogo } from '../components/Logo';
 import { CountryBadge } from '../components/CountryBadge';
+import { MobileSidebar } from '../components/MobileSidebar';
 
 const FlipDigit = ({ digit, delay = 0 }) => (
   <motion.div
@@ -347,11 +348,17 @@ export default function Design1V1() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
-            <aside className="lg:w-72 shrink-0 order-2 lg:order-1">
+            {/* Desktop sidebar */}
+            <aside className="hidden lg:block lg:w-72 shrink-0 order-1">
               <LeaguesSidebar selectedLeague={selectedLeague} onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)} />
             </aside>
 
-            <div className="flex-1 order-1 lg:order-2">
+            {/* Mobile sidebar (Sheet drawer) */}
+            <MobileSidebar selectedLeague={selectedLeague}>
+              <LeaguesSidebar selectedLeague={selectedLeague} onLeagueSelect={(id) => setSelectedLeague(id === selectedLeague ? null : id)} />
+            </MobileSidebar>
+
+            <div className="flex-1 lg:order-2">
               {/* Marco de tiza completo para todos los partidos */}
               <ChalkFrame>
                 <AnimatePresence mode="wait">
