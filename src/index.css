@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design 1: Retro Stadium - Warm ochre and grass green */
+  --color-stadium-ochre: #D4A03D;
+  --color-stadium-grass: #2D5A27;
+  --color-stadium-chalk: #F5F0E6;
+  --color-stadium-night: #1A1A1A;
+  --color-stadium-red: #C44536;
+
+  /* Design 2: Neon Scoreboard - Electric night vibes */
+  --color-neon-cyan: #00F5FF;
+  --color-neon-magenta: #FF00FF;
+  --color-neon-lime: #39FF14;
+  --color-neon-orange: #FF6B00;
+  --color-neon-dark: #0A0A0F;
+  --color-neon-purple: #8B00FF;
+
+  /* Design 3: Editorial - Newspaper/Magazine style */
+  --color-editorial-black: #121212;
+  --color-editorial-white: #FAFAFA;
+  --color-editorial-red: #E63946;
+  --color-editorial-gray: #6B7280;
+  --color-editorial-cream: #FDF6E3;
+
+  /* Design 4: Brutalist Concrete */
+  --color-brutal-concrete: #B8B5AD;
+  --color-brutal-steel: #4A4A4A;
+  --color-brutal-rust: #A35A3F;
+  --color-brutal-white: #F0EDE5;
+  --color-brutal-black: #1C1C1C;
+
+  /* Design 5: Aurora Minimal - Soft gradients */
+  --color-aurora-violet: #7C3AED;
+  --color-aurora-rose: #EC4899;
+  --color-aurora-sky: #0EA5E9;
+  --color-aurora-mint: #10B981;
+  --color-aurora-dark: #0F172A;
+  --color-aurora-light: #F8FAFC;
+
+  /* Typography */
+  --font-display: "Bebas Neue", sans-serif;
+  --font-editorial: "Playfair Display", serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-brutal: "Anton", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-condensed: "Barlow Condensed", sans-serif;
+}
+
+/* Global resets */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for dark themes */
+.dark-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dark-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.dark-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Grain effect */
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+}
