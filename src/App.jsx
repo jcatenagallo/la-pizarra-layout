@@ -9,6 +9,12 @@ import Design8 from './designs/Design8';
 import Design9 from './designs/Design9';
 import Design10 from './designs/Design10';
 import Design11 from './designs/Design11';
+import Design12 from './designs/Design12';
+import Design13 from './designs/Design13';
+import Design14 from './designs/Design14';
+import Design15 from './designs/Design15';
+import Design16 from './designs/Design16';
+import Design17 from './designs/Design17';
 import DesignNav from './components/DesignNav';
 
 function App() {
@@ -27,6 +33,12 @@ function App() {
         <Route path="/9" element={<Design9 />} />
         <Route path="/10" element={<Design10 />} />
         <Route path="/11" element={<Design11 />} />
+        <Route path="/12" element={<Design12 />} />
+        <Route path="/13" element={<Design13 />} />
+        <Route path="/14" element={<Design14 />} />
+        <Route path="/15" element={<Design15 />} />
+        <Route path="/16" element={<Design16 />} />
+        <Route path="/17" element={<Design17 />} />
       </Routes>
       <DesignNav />
     </BrowserRouter>

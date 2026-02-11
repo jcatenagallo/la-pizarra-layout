@@ -95,8 +95,11 @@ const variants = {
   },
 };
 
-export function MobileSidebar({ children, selectedLeague, onClose, bottomOffset = false, variant = 'stadium' }) {
-  const [open, setOpen] = useState(false);
+export function MobileSidebar({ children, selectedLeague, onClose, bottomOffset = false, variant = 'stadium', open: controlledOpen, onOpenChange: controlledOnOpenChange, hideFloatingButton = false }) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? controlledOnOpenChange : setInternalOpen;
   const v = variants[variant] || variants.stadium;
 
   const handleOpenChange = (value) => {
@@ -107,23 +110,25 @@ export function MobileSidebar({ children, selectedLeague, onClose, bottomOffset 
   return (
     <div className="lg:hidden">
       {/* Floating trigger button */}
-      <motion.button
-        onClick={() => setOpen(true)}
-        className={`fixed ${bottomOffset ? 'bottom-16' : 'bottom-6'} right-6 z-40 flex items-center gap-2
-                   ${v.button} font-condensed font-bold
-                   uppercase tracking-wider text-sm
-                   p-3.5 rounded-full
-                   cursor-pointer`}
-        whileTap={{ scale: 0.95 }}
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
-      >
-        <ListFilter size={18} />
-        {selectedLeague && (
-          <span className={`w-2 h-2 rounded-full ${v.indicator} animate-pulse`} />
-        )}
-      </motion.button>
+      {!hideFloatingButton && (
+        <motion.button
+          onClick={() => setOpen(true)}
+          className={`fixed ${bottomOffset ? 'bottom-16' : 'bottom-6'} right-6 z-40 flex items-center gap-2
+                     ${v.button} font-condensed font-bold
+                     uppercase tracking-wider text-sm
+                     p-3.5 rounded-full
+                     cursor-pointer`}
+          whileTap={{ scale: 0.95 }}
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 20 }}
+        >
+          <ListFilter size={18} />
+          {selectedLeague && (
+            <span className={`w-2 h-2 rounded-full ${v.indicator} animate-pulse`} />
+          )}
+        </motion.button>
+      )}
 
       <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetContent
