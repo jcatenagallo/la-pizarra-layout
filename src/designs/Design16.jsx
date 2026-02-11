@@ -289,8 +289,11 @@ const MatchCard = ({ match, index, expandedId, onToggle }) => {
         {/* Expanded: full events timeline */}
         <CollapsibleContent>
           {hasEvents && (
-            <div className="border-t border-white/10 relative z-10">
-              <MatchEventsPanel events={match.events} />
+            <div className="relative z-10 flex">
+              <div className="w-11 md:w-16 shrink-0 border-r-2 border-stadium-ochre/40" />
+              <div className="flex-1 min-w-0 border-t border-white/10">
+                <MatchEventsPanel events={match.events} />
+              </div>
             </div>
           )}
         </CollapsibleContent>
